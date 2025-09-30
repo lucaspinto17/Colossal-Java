@@ -10,14 +10,16 @@ public class Mago extends Personagem {
     private int quantidadeFeiticos;
     
     public Mago(String id, String codinome, int manaAtual, int vida, int manaMax, 
-                int poderBase, int resistenciaMagica, String escola, String foco, 
-                int quantidadeFeiticos) {
+    int poderBase, int resistenciaMagica, String escola, String foco,int quantidadeFeiticos) {
         super(id, codinome, vida, manaMax, poderBase, resistenciaMagica);
         this.manaAtual = manaAtual;
         this.escola = escola;
         this.foco = foco;
         this.quantidadeFeiticos = quantidadeFeiticos;
     }
+    
+
+    
 
     private String definirFocoPorEscola(String escola) {
         if (escola.equals("Elemental")) {

@@ -11,7 +11,7 @@ public class Feitico {
     private double poderBase;
 
     public Feitico(String nome, String tipo, String escola, 
-                  int custoMana, double tempoRecarga, double poderBase) {
+        int custoMana, double tempoRecarga, double poderBase) {
         this.nome = nome;
         this.tipo = tipo;
         this.escola = escola;
@@ -19,7 +19,7 @@ public class Feitico {
         this.tempoRecarga = tempoRecarga;
         this.poderBase = poderBase;
     }
-
+    
     public String getNomeFeitico() {
         return nome;
     }

@@ -1,3 +1,4 @@
+import java.util.Scanner;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -6,34 +7,81 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
+        Scanner teclado = new Scanner(System.in);
+        
+        
+           
+
         LocalDateTime hora = LocalDateTime.now();
         DateTimeFormatter dataformatada = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         String data = hora.format(dataformatada);
         System.out.println("Hora inicializada: " + data);
-        Mago merlin = new Mago("M001", "Merlin", 10000, 100, 100000, 30, 20, "Arcano", "Cajado", 0);
-        Mago darkMage = new Mago("M002", "Sombrio", 80, 80, 80, 25, 15, "Sombrio", "Tomo", 0);
-        Mago elementalMage = new Mago("M003", "Elementalista", 90, 90, 90, 28, 18, "Elemental", "Vara", 0);
-        
+        Mago m1 = new Mago("Default","Default",100,100,100,25,15,"Default","Tomo",0);
+        Mago m2 = new Mago("Default","Default",100,100,100,25,15,"Default","Tomo",0);
+        Mago m3 = new Mago("Default","Default",100,100,100,25,15,"Default","Tomo",0);  
         Feitico bolaFogo = new Feitico("Bola de Fogo", "Projetil", "Elemental", 20, 3.0, 25.0);
         Feitico nevasca = new Feitico("Nevasca", "Area", "Elemental", 40, 8.0, 30.0);
         Feitico drenagemVida = new Feitico("Drenagem de Vida", "Canalizado", "Sombrio", 30, 5.0, 20.0);
+        /*Bem manual ainda, não possui o loop, porém fase de teste */
+        System.out.println("{==Registro Mago==}");
+        System.out.println("Escolha seu ID: ");
+            String id = teclado.nextLine();
+        System.out.println("Escolha seu Codinome:");    
+            String codinome = teclado.nextLine();
+        System.out.println("Escolha sua Escola");
+            String escola = teclado.nextLine();
+        m1.setId(id);
+        m1.setEscola(escola);
+        m1.setCodinome(codinome);
+        System.out.println("Você é o " + m1.getCodinome());
+        /*Bem manual ainda, não possui o loop, porém fase de teste */
+        System.out.println("{==Registro Mago==}");
+        System.out.println("Escolha seu ID: ");
+            String id2 = teclado.nextLine();
+        System.out.println("Escolha seu Codinome:");    
+            String codinome2 = teclado.nextLine();
+        System.out.println("Escolha sua Escola");
+            String escola2 = teclado.nextLine();
+        m2.setId(id2);
+        m2.setEscola(escola2);
+        m2.setCodinome(codinome2);
+        System.out.println("Você é o " + m2.getCodinome());
+        /*Bem manual ainda, não possui o loop, porém fase de teste */
+
+        System.out.println("{==Registro Mago==}");
+        System.out.println("Escolha seu ID: ");
+            String id3 = teclado.nextLine();
+        System.out.println("Escolha seu Codinome:");    
+            String codinome3 = teclado.nextLine();
+        System.out.println("Escolha sua Escola");
+            String escola3 = teclado.nextLine();
+        m3.setId(id3);
+        m3.setEscola(escola3);
+        m3.setCodinome(codinome3);
+        System.out.println("Você é o " + m3.getCodinome());
+
+
+        
+
         
         System.out.println("=== FEITIÇO PROJÉTIL ===");
-        merlin.utilizarFeitico(bolaFogo, darkMage);//feitico e alvo
-        System.out.println("Vida do " + darkMage.getCodinome() + ": " + darkMage.getVida());
+        m3.utilizarFeitico(bolaFogo, m2);//feitico e alvo
+        System.out.println("Vida do " + m2.getCodinome() + ": " + m2.getVida());
         
         System.out.println("\n=== FEITIÇO DE ÁREA ===");
         ArrayList<Personagem> alvosArea = new ArrayList<>();
-        alvosArea.add(darkMage);
-        alvosArea.add(elementalMage);//adicionei os alvos manualmente, seria bom adiconar uma funçao
+        alvosArea.add(m2);
+        alvosArea.add(m1);//adicionei os alvos manualmente, seria bom adiconar uma funçao
         
-        merlin.utilizarFeiticoArea(nevasca, alvosArea);
-        System.out.println("Vida do " + darkMage.getCodinome() + ": " + darkMage.getVida());
-        System.out.println("Vida do " + elementalMage.getCodinome() + ": " + elementalMage.getVida());
+        m3.utilizarFeiticoArea(nevasca, alvosArea);
+        System.out.println("Vida do " + m2.getCodinome() + ": " + m2.getVida());
+        System.out.println("Vida do " + m1.getCodinome() + ": " + m1.getVida());
         
         System.out.println("\n=== FEITIÇO CANALIZADO ===");
-        merlin.utilizarFeiticoCanalizado(drenagemVida, darkMage, 1);
-        merlin.utilizarFeiticoCanalizado(drenagemVida, darkMage, 0);
-        System.out.println("Vida do " + darkMage.getCodinome() + ": " + darkMage.getVida());
+        m3.utilizarFeiticoCanalizado(drenagemVida, m2, 1);
+        m3.utilizarFeiticoCanalizado(drenagemVida, m2, 0);
+        System.out.println("Vida do " + m2.getCodinome() + ": " + m2.getVida());
+
+        
     }
 }
