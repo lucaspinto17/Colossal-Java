@@ -1,7 +1,9 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+        Scanner teclado = new Scanner(System.in);
         System.out.println("=== TORNEIO DOS 5 MAGOS ===");
         
         // Criando 5 magos de escolas diferentes

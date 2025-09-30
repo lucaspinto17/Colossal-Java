@@ -5,7 +5,7 @@ public class Mago extends Personagem {
     private String foco;   
     private int manaAtual;
     private ArrayList<Feitico> grimorio = new ArrayList<>();
-    private int quantidadeFeiticos;
+    // private int quantidadeFeiticos;
     
     // Sistema de Estados
     private boolean silenciado;
@@ -29,7 +29,7 @@ public class Mago extends Personagem {
         this.manaAtual = manaAtual;
         this.escola = escola;
         this.foco = foco;
-        this.quantidadeFeiticos = quantidadeFeiticos;
+        // this.quantidadeFeiticos = quantidadeFeiticos;
         
         // Inicializar estados
         this.silenciado = false;
