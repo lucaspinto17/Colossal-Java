@@ -1,2 +1,2 @@
 # MAGICGAME-Java
-Projeto Teste de Game em Java, proposto pelo Isaac Souza 
+Projeto Teste de um Jogo de Magos em Java, proposto pelo Isaac Souza 
