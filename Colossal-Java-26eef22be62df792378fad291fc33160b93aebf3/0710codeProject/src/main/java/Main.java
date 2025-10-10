@@ -1,3 +1,7 @@
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -6,16 +10,14 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class Main {
     private static final DateTimeFormatter FORMATADOR_DATA = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
     private static final Random RANDOM = new Random();
 
     public static void main(String[] args) {
-        Database.inicializarBanco();
-        DueloDAO dueloDAO = new DueloDAO();
-    
-        MagoDAO magoDAO = new MagoDAO();
 
         GerenciadorMagos gm = new GerenciadorMagos();
         Scanner scanner = new Scanner(System.in);
@@ -63,6 +65,8 @@ public class Main {
         System.out.println("\n--- Gestão de Magos ---");
         System.out.println("1. Cadastrar Novo Mago");
         System.out.println("2. Listar Magos Cadastrados");
+        System.out.println("3. Exportar Magos para JSON");
+        System.out.println("4. Importar Magos de JSON");
         System.out.println("0. Voltar ao Menu Principal");
         System.out.print("  Escolha uma opção: ");
         int opcao = lerInteiro(scanner);
@@ -73,10 +77,109 @@ public class Main {
             case 2:
                 gm.listarMagos();
                 break;
+            case 3:
+                System.out.print("Digite o nome do ficheiro para exportar (ex: magos.json): ");
+                String nomeArquivoExport = scanner.nextLine();
+                exportarMagosParaJson(gm, nomeArquivoExport);
+                break;
+            case 4:
+                System.out.print("Digite o nome do ficheiro para importar (ex: magos_novos.json): ");
+                String nomeArquivoImport = scanner.nextLine();
+                importarMagosDeJson(gm, nomeArquivoImport);
+                break;
             case 0:
                 return;
             default:
                 System.out.println("Opção inválida.");
+        }
+    }
+
+    private static void exportarMagosParaJson(GerenciadorMagos gm, String nomeArquivo) {
+        System.out.println("\nIniciando exportação de magos para " + nomeArquivo + "...");
+        JSONArray jsonArrayMagos = new JSONArray();
+
+        for (Mago mago : gm.getMagos()) {
+            JSONObject jsonMago = new JSONObject();
+            jsonMago.put("id", mago.getId());
+            jsonMago.put("codinome", mago.getCodinome());
+
+            if (mago instanceof MagoArcano) {
+                jsonMago.put("escola", "Arcano");
+            } else if (mago instanceof MagoElemental) {
+                jsonMago.put("escola", "Elemental");
+            } else if (mago instanceof MagoSombrio) {
+                jsonMago.put("escola", "Sombrio");
+            }
+
+            jsonMago.put("manaMaxima", mago.getManaMax());
+            jsonMago.put("poderBase", mago.getPoderBase());
+            jsonMago.put("resistenciaMagica", mago.getResistenciaMagica());
+            jsonMago.put("controlador", mago.getControlador());
+            jsonMago.put("perfilIA", mago.getControlador());
+
+            jsonArrayMagos.put(jsonMago);
+        }
+
+        try (FileWriter file = new FileWriter(nomeArquivo)) {
+            file.write(jsonArrayMagos.toString(4));
+            file.flush();
+            System.out
+                    .println("==> Exportação concluída com sucesso! " + gm.getMagos().size() + " magos foram salvos.");
+        } catch (IOException e) {
+            System.err.println("Erro ao escrever o ficheiro JSON: " + e.getMessage());
+        }
+    }
+
+    private static void importarMagosDeJson(GerenciadorMagos gm, String nomeArquivo) {
+        System.out.println("\nIniciando importação de magos de " + nomeArquivo + "...");
+        try {
+            String conteudoJson = new String(Files.readAllBytes(Paths.get(nomeArquivo)));
+            JSONArray jsonArrayMagos = new JSONArray(conteudoJson);
+            int magosImportados = 0;
+
+            for (int i = 0; i < jsonArrayMagos.length(); i++) {
+                JSONObject jsonMago = jsonArrayMagos.getJSONObject(i);
+                int id = jsonMago.getInt("id");
+
+                if (gm.buscarMagoPorId(id) != null) {
+                    System.out.println(" > Aviso: Mago com ID " + id + " já existe. Ignorando.");
+                    continue;
+                }
+
+                String codinome = jsonMago.getString("codinome");
+                String escola = jsonMago.getString("escola");
+                int mana = jsonMago.getInt("manaMaxima");
+                double poder = jsonMago.getDouble("poderBase");
+                double res = jsonMago.getDouble("resistenciaMagica");
+                String foco = jsonMago.getString("foco");
+                String ctrl = jsonMago.getString("controlador");
+                String perfilIA = jsonMago.optString("perfilIA", null);
+                Mago novoMago = null;
+
+                switch (escola) {
+                    case "Arcano":
+                        novoMago = new MagoArcano(id, codinome, mana, poder, res, foco, ctrl, perfilIA);
+                        break;
+                    case "Elemental":
+                        novoMago = new MagoElemental(id, codinome, mana, poder, res, foco, ctrl, perfilIA);
+                        break;
+                    case "Sombrio":
+                        novoMago = new MagoSombrio(id, codinome, mana, poder, res, foco, ctrl, perfilIA);
+                        break;
+                    default:
+                        System.out.println(" > Aviso: Escola '" + escola + "' desconhecida para o mago com ID " + id
+                                + ". Ignorando.");
+                }
+
+                if (novoMago != null && gm.cadastrarMago(novoMago)) {
+                    magosImportados++;
+                }
+            }
+            System.out.println("==> Importação concluída! " + magosImportados + " novos magos foram cadastrados.");
+        } catch (IOException e) {
+            System.err.println("Erro ao ler o ficheiro JSON: " + e.getMessage());
+        } catch (org.json.JSONException e) {
+            System.err.println("Erro: O ficheiro não parece ser um JSON válido. " + e.getMessage());
         }
     }
 
@@ -346,7 +449,8 @@ public class Main {
         gerenciador.cadastrarMago(new MagoElemental(2, "Ignis", 120, 12, 15, Mago.VARA, Mago.IA, Mago.IA_OPORTUNISTA));
         gerenciador.cadastrarMago(new MagoSombrio(3, "Nocturne", 90, 18, 5, Mago.TOMO, Mago.IA, Mago.IA_OPORTUNISTA));
         gerenciador.cadastrarMago(new MagoArcano(4, "Gandalf", 105, 14, 12, Mago.CAJADO, Mago.IA, Mago.IA_AGRESSIVO));
-        gerenciador.cadastrarMago(new MagoElemental(5, "Glacius", 115, 13, 13, Mago.VARA, Mago.IA, Mago.IA_OPORTUNISTA));
+        gerenciador
+                .cadastrarMago(new MagoElemental(5, "Glacius", 115, 13, 13, Mago.VARA, Mago.IA, Mago.IA_OPORTUNISTA));
         gerenciador.cadastrarMago(new MagoSombrio(6, "Umbra", 95, 17, 8, Mago.TOMO, Mago.IA, Mago.IA_AGRESSIVO));
     }
 }

@@ -16,11 +16,11 @@
 
     <dependencies>
 
-        <!-- Driver JDBC do SQLite -->
+       
         <dependency>
-            <groupId>org.xerial</groupId>
-            <artifactId>sqlite-jdbc</artifactId>
-            <version>3.45.1.0</version>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20231013</version>
         </dependency>
 
         <!-- Bibliotec para Unit -->

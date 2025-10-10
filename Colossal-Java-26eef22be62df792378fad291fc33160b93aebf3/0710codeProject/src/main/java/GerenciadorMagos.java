@@ -3,7 +3,7 @@ import java.util.List;
 
 public class GerenciadorMagos {
     private List<Mago> magos = new ArrayList<>();
-    private MagoDAO magoDAO = new MagoDAO();
+   
     private final int LIMITE_MAGOS = 12;
 
     public boolean cadastrarMago(Mago mago) {
@@ -12,8 +12,8 @@ public class GerenciadorMagos {
             return false;
         }
         magos.add(mago);
-        //Classe de Mago Data Access Object para levar até a tabela
-        magoDAO.inserirMago(mago);
+       
+        
         return true;
     }
 

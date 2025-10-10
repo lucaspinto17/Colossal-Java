@@ -36,7 +36,7 @@ public abstract class Mago {
         this.vidaAtual = this.vidaMax;
         inicializarGrimorio();
     }
-
+   
     protected abstract void inicializarGrimorio();
 
     /**
