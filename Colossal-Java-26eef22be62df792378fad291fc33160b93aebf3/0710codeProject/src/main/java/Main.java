@@ -346,8 +346,7 @@ public class Main {
         gerenciador.cadastrarMago(new MagoElemental(2, "Ignis", 120, 12, 15, Mago.VARA, Mago.IA, Mago.IA_OPORTUNISTA));
         gerenciador.cadastrarMago(new MagoSombrio(3, "Nocturne", 90, 18, 5, Mago.TOMO, Mago.IA, Mago.IA_OPORTUNISTA));
         gerenciador.cadastrarMago(new MagoArcano(4, "Gandalf", 105, 14, 12, Mago.CAJADO, Mago.IA, Mago.IA_AGRESSIVO));
-        gerenciador
-                .cadastrarMago(new MagoElemental(5, "Glacius", 115, 13, 13, Mago.VARA, Mago.IA, Mago.IA_OPORTUNISTA));
+        gerenciador.cadastrarMago(new MagoElemental(5, "Glacius", 115, 13, 13, Mago.VARA, Mago.IA, Mago.IA_OPORTUNISTA));
         gerenciador.cadastrarMago(new MagoSombrio(6, "Umbra", 95, 17, 8, Mago.TOMO, Mago.IA, Mago.IA_AGRESSIVO));
     }
 }

@@ -17,6 +17,9 @@ public class Duelo {
     private boolean finalizado = false;
     private List<Mago> equipe1, equipe2;
 
+    // NOVO ATRIBUTO ADICIONADO
+    private String condicaoCampoAtual = CondicaoCampo.NORMAL;
+
     private Map<Mago, Double> danoCausado = new HashMap<>();
     private Map<Mago, Double> danoMitigado = new HashMap<>();
     private Map<Mago, Integer> abates = new HashMap<>();
@@ -42,8 +45,8 @@ public class Duelo {
         assistencias.put(m, 0);
     }
     public void setId(int id) {
-    this.id = id;
-}
+        this.id = id;
+    }
     public void adicionarDano(Mago autor, double dano) { danoCausado.put(autor, danoCausado.get(autor) + dano); }
     public void adicionarAbate(Mago autor) { abates.put(autor, abates.get(autor) + 1); }
     public void adicionarDanoMitigado(Mago defensor, double mitigado) { danoMitigado.put(defensor, danoMitigado.get(defensor) + mitigado); }
@@ -51,7 +54,7 @@ public class Duelo {
         Mago assistente = ultimoAtacante.get(alvo);
         if (assistente != null && assistente != abatedor && assistente.estaVivo()) {
             assistencias.put(assistente, assistencias.get(assistente) + 1);
-            System.out.printf("  > %s recebe uma assistência!%n", assistente.getCodinome());
+            System.out.printf("   > %s recebe uma assistência!%n", assistente.getCodinome());
         }
     }
     public void setUltimoAtacante(Mago alvo, Mago atacante) { this.ultimoAtacante.put(alvo, atacante); }
@@ -69,6 +72,10 @@ public class Duelo {
     public void setFinalizado(boolean finalizado) { this.finalizado = finalizado; }
     public void setVencedor(String vencedor) { this.vencedor = vencedor; }
     
+    // NOVOS MÉTODOS GETTER E SETTER ADICIONADOS
+    public String getCondicaoCampoAtual() { return condicaoCampoAtual; }
+    public void setCondicaoCampoAtual(String condicaoCampoAtual) { this.condicaoCampoAtual = condicaoCampoAtual; }
+    
     @Override
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
@@ -78,12 +85,3 @@ public class Duelo {
                 finalizado ? "Finalizado - Vencedor: " + vencedor : "Agendado");
     }
 }
-/*
-================================== FUNCIONALIDADES DA CLASSE ==================================
-- Modela um evento de Duelo, guardando todas as informações importantes sobre ele.
-- Contém as constantes para os nomes das Arenas.
-- Armazena os participantes (equipa1, equipa2), o modo (1v1, 3v3), a arena e a data/hora.
-- Guarda um placar detalhado para cada mago (dano, abates, assistências, etc.) usando Maps.
-- Controla o estado do duelo (agendado ou finalizado) e quem foi o vencedor.
-=============================================================================================
-*/
